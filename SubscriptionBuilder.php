@@ -154,8 +154,6 @@ class SubscriptionBuilder
     /**
      * Add a new Stripe subscription to the user.
      *
-     * @param array $options
-     *
      * @return SubscriptionModel
      */
     public function add(array $options = [])
@@ -167,7 +165,6 @@ class SubscriptionBuilder
      * Create a new Stripe subscription.
      *
      * @param string|null $token
-     * @param array $options
      *
      * @return SubscriptionModel
      *
@@ -202,7 +199,6 @@ class SubscriptionBuilder
      * Get the Stripe customer instance for the current user and token.
      *
      * @param string|null $token
-     * @param array $options
      *
      * @return \Stripe\Customer
      */

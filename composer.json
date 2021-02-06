@@ -1,6 +1,6 @@
 {
-    "name": "yii2mod/yii2-cashier",
-    "description": "Yii2 Cashier provides an interface to Stripe's subscription billing services.",
+    "name": "awayr-sudo/yii2-cashier",
+    "description": "Forked from [yii2mod/cashier], Yii2 Cashier provides an interface to Stripe's subscription billing services.",
     "type": "yii2-extension",
     "keywords": [
         "yii2",
@@ -10,8 +10,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Igor Chepurnoi",
-            "email": "chepurnoi.igor@gmail.com"
+            "name": "AWAYR",
+            "email": "hello@awayr.net"
         }
     ],
     "require": {
@@ -25,11 +25,11 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "~2.0",
         "phpunit/phpunit": "~7.0"
-        
+
     },
     "autoload": {
         "psr-4": {
-            "yii2mod\\cashier\\": ""
+            "awayr-sudo\\cashier\\": ""
         }
     },
     "repositories": [

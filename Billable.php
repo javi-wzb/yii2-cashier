@@ -36,9 +36,6 @@ trait Billable
      * Make a "one off" charge on the customer for the given amount.
      *
      * @param int $amount
-     * @param array $options
-     *
-     * @return Charge
      *
      * @throws Card
      */
@@ -65,9 +62,6 @@ trait Billable
      * Refund a customer for a charge.
      *
      * @param $charge
-     * @param array $options
-     *
-     * @return StripeRefund
      */
     public function refund($charge, array $options = []): StripeRefund
     {
@@ -78,8 +72,6 @@ trait Billable
 
     /**
      * Determines if the customer currently has a card on file.
-     *
-     * @return bool
      */
     public function hasCardOnFile(): bool
     {
@@ -91,7 +83,6 @@ trait Billable
      *
      * @param string $description
      * @param int $amount
-     * @param array $options
      *
      * @return bool|StripeInvoice
      *
@@ -119,11 +110,6 @@ trait Billable
 
     /**
      * Begin creating a new subscription.
-     *
-     * @param string $subscription
-     * @param string $plan
-     *
-     * @return SubscriptionBuilder
      */
     public function newSubscription(string $subscription, string $plan): SubscriptionBuilder
     {
@@ -132,11 +118,6 @@ trait Billable
 
     /**
      * Determine if the user is on trial.
-     *
-     * @param string $subscription
-     * @param string|null $plan
-     *
-     * @return bool
      */
     public function onTrial(string $subscription = 'default', ?string $plan = null): bool
     {
@@ -154,8 +135,6 @@ trait Billable
 
     /**
      * Determine if the user is on a "generic" trial at the user level.
-     *
-     * @return bool
      */
     public function onGenericTrial(): bool
     {
@@ -164,11 +143,6 @@ trait Billable
 
     /**
      * Determine if the user has a given subscription.
-     *
-     * @param string $subscription
-     * @param string|null $plan
-     *
-     * @return bool
      */
     public function subscribed(string $subscription = 'default', ?string $plan = null): bool
     {
@@ -188,10 +162,6 @@ trait Billable
 
     /**
      * Get a subscription instance by name.
-     *
-     * @param string $subscription
-     *
-     * @return SubscriptionModel|null
      */
     public function subscription(string $subscription = 'default'): ?SubscriptionModel
     {
@@ -226,8 +196,6 @@ trait Billable
 
     /**
      * Get the entity's upcoming invoice.
-     *
-     * @return Invoice|null
      */
     public function upcomingInvoice(): ?Invoice
     {
@@ -244,8 +212,6 @@ trait Billable
     /**
      * Find an invoice by ID.
      *
-     * @param string $id
-     *
      * @return Invoice|null
      */
     public function findInvoice(string $id): Invoice
@@ -258,8 +224,6 @@ trait Billable
 
     /**
      * Find an invoice or throw a 404 error.
-     *
-     * @param string $id
      *
      * @return Invoice
      *
@@ -279,9 +243,6 @@ trait Billable
     /**
      * Create an invoice download Response.
      *
-     * @param string $id
-     * @param array $data
-     *
      * @return Response
      */
     public function downloadInvoice(string $id, array $data)
@@ -291,11 +252,6 @@ trait Billable
 
     /**
      * Get a collection of the entity's invoices.
-     *
-     * @param bool $includePending
-     * @param array $parameters
-     *
-     * @return array
      */
     public function invoices(bool $includePending = false, array $parameters = []): array
     {
@@ -321,10 +277,6 @@ trait Billable
 
     /**
      * Get an array of the entity's invoices.
-     *
-     * @param array $parameters
-     *
-     * @return array
      */
     public function invoicesIncludingPending(array $parameters = []): array
     {
@@ -333,8 +285,6 @@ trait Billable
 
     /**
      * Update customer's credit card.
-     *
-     * @param string $token
      */
     public function updateCard(string $token): void
     {
@@ -423,8 +373,6 @@ trait Billable
      *
      * @param array|string $plans
      * @param string $subscription
-     *
-     * @return bool
      */
     public function subscribedToPlan($plans, $subscription = 'default'): bool
     {
@@ -447,8 +395,6 @@ trait Billable
      * Determine if the entity is on the given plan.
      *
      * @param string $plan
-     *
-     * @return bool
      */
     public function onPlan($plan): bool
     {
@@ -459,8 +405,6 @@ trait Billable
 
     /**
      * Determine if the entity has a Stripe customer ID.
-     *
-     * @return bool
      */
     public function hasStripeId(): bool
     {
@@ -469,11 +413,6 @@ trait Billable
 
     /**
      * Create a Stripe customer for the given user.
-     *
-     * @param string $token
-     * @param array $options
-     *
-     * @return Customer
      */
     public function createAsStripeCustomer(string $token, array $options = []): Customer
     {
@@ -500,9 +439,15 @@ trait Billable
     }
 
     /**
+     * Create a Stripe customer for the given user.
+     */
+    public function createStripeSession(string $token, array $options = []): Customer
+    {
+        // $this->use
+    }
+
+    /**
      * Get the Stripe customer for the user.
-     *
-     * @return Customer
      */
     public function asStripeCustomer(): Customer
     {
@@ -511,8 +456,6 @@ trait Billable
 
     /**
      * Get the Stripe supported currency used by the entity.
-     *
-     * @return string
      */
     public function preferredCurrency(): string
     {
@@ -521,8 +464,6 @@ trait Billable
 
     /**
      * Get the tax percentage to apply to the subscription.
-     *
-     * @return int
      */
     public function taxPercentage(): int
     {
@@ -531,8 +472,6 @@ trait Billable
 
     /**
      * Get the Stripe API key.
-     *
-     * @return string
      */
     public static function getStripeKey(): string
     {
