@@ -102,7 +102,8 @@ trait Billable
         ], $options);
 
         StripeInvoiceItem::create(
-            $options, ['api_key' => $this->getStripeKey()]
+            $options,
+            ['api_key' => $this->getStripeKey()]
         );
 
         return $this->invoice();
@@ -201,7 +202,8 @@ trait Billable
     {
         try {
             $stripeInvoice = StripeInvoice::upcoming(
-                ['customer' => $this->stripe_id], ['api_key' => $this->getStripeKey()]
+                ['customer' => $this->stripe_id],
+                ['api_key' => $this->getStripeKey()]
             );
 
             return new Invoice($this, $stripeInvoice);
@@ -258,8 +260,8 @@ trait Billable
         $invoices = [];
 
         $parameters = array_merge(['limit' => 24], $parameters);
-
-        $stripeInvoices = $this->asStripeCustomer()->invoices($parameters);
+        $stripeInvoices = StripeInvoice::all($parameters, ['api_key' => $this->getStripeKey()]);
+        // $stripeInvoices = $this->asStripeCustomer()->invoices($parameters);
 
         // Here we will loop through the Stripe invoices and create our own custom Invoice
         // instances that have more helper methods and are generally more convenient to
@@ -290,6 +292,7 @@ trait Billable
     {
         $customer = $this->asStripeCustomer();
         $token = Token::retrieve($token, ['api_key' => $this->getStripeKey()]);
+
         // If the given token already has the card as their default source, we can just
         // bail out of the method now. We don't need to keep adding the same card to
         // the user's account each time we go through this particular method call.
@@ -307,7 +310,6 @@ trait Billable
             : null;
 
         $this->fillCardDetails($source);
-
         $this->save();
     }
 

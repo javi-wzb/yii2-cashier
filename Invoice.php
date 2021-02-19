@@ -50,7 +50,7 @@ class Invoice
      */
     public function date($timezone = null)
     {
-        $carbon = Carbon::createFromTimestampUTC($this->invoice->date);
+        $carbon = Carbon::createFromTimestampUTC($this->invoice->status_transitions->paid_at);
 
         return $timezone ? $carbon->setTimezone($timezone) : $carbon;
     }
@@ -244,7 +244,8 @@ class Invoice
         $viewPath = ArrayHelper::getValue($data, 'invoiceView', '@vendor/yii2mod/yii2-cashier/views/invoice');
 
         return Yii::$app->controller->renderPartial($viewPath, array_merge(
-            $data, ['invoice' => $this, 'user' => $this->user]
+            $data,
+            ['invoice' => $this, 'user' => $this->user]
         ));
     }
 

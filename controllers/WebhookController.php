@@ -24,7 +24,7 @@ class WebhookController extends Controller
     public $enableCsrfValidation = false;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -63,8 +63,6 @@ class WebhookController extends Controller
     /**
      * Handle a cancelled customer from a Stripe subscription.
      *
-     * @param array $payload
-     *
      * @return Response
      */
     protected function handleCustomerSubscriptionDeleted(array $payload)
@@ -91,7 +89,7 @@ class WebhookController extends Controller
      *
      * @param string $stripeId
      *
-     * @return null|static
+     * @return static|null
      */
     protected function getUserByStripeId($stripeId)
     {
