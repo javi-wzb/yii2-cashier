@@ -28,7 +28,6 @@
 
     },
     "autoload": {
-        "psr-0":{"awayr\\cashier\\": ""},
         "psr-4": {
             "awayr\\cashier\\": ""
         }
