@@ -184,7 +184,7 @@ class SubscriptionBuilder
             'name' => $this->name,
             'stripe_id' => $subscription->id,
             'stripe_plan' => $this->plan,
-            'quantity' => $this->quantity,
+            // 'quantity' => $this->quantity,
             'trial_ends_at' => $trialEndsAt,
             'ends_at' => null,
         ]);
@@ -228,7 +228,7 @@ class SubscriptionBuilder
     {
         return array_filter([
             'plan' => $this->plan,
-            'quantity' => $this->quantity,
+            // 'quantity' => $this->quantity,
             'coupon' => $this->coupon,
             'trial_end' => $this->getTrialEndForPayload(),
             'tax_percent' => $this->getTaxPercentageForPayload(),
