@@ -184,13 +184,15 @@ class SubscriptionBuilder
             'name' => $this->name,
             'stripe_id' => $subscription->id,
             'stripe_plan' => $this->plan,
-            // 'quantity' => $this->quantity,
+            'quantity' => $this->quantity,
             'trial_ends_at' => $trialEndsAt,
             'ends_at' => null,
         ]);
         if ($subscriptionModel->save()) {
-            return $subscriptionModel;
+            // return $subscriptionModel;
+            return [$subscription, $subscriptionModel];
         } else {
+            print_r($subscriptionModel->getErrors());die;
             throw new Exception('Subscription was not saved.');
         }
     }
