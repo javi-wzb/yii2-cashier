@@ -18,7 +18,7 @@
         "php": ">=7.2",
         "yiisoft/yii2": "~2.0.14",
         "yii2mod/yii2-behaviors": "*",
-        "stripe/stripe-php": "~7.69.0",
+        "stripe/stripe-php": "~8.1.0",
         "nesbot/carbon": "~2.0",
         "dompdf/dompdf": "^0.8.0"
     },
