@@ -1,8 +1,8 @@
 <p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
+    <a href="https://github.com/awayr-sudo" target="_blank">
+        <img src="https://avatars.githubusercontent.com/u/55288049" height="100px">
     </a>
-    <h1 align="center">Cashier Extension for Yii 2</h1>
+    <h1 align="center">Cashier Extension for Yii 2 (Ported By Famous Yii2 Cashier [yii2mod/cashier]). Implemented with Latest Updates.</h1>
     <br>
 </p>
 
@@ -23,13 +23,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist yii2mod/yii2-cashier "*"
+php composer.phar require --prefer-dist awayr-sudo/yii2-cashier "*"
 ```
 
 or add
 
 ```
-"yii2mod/yii2-cashier": "*"
+"awayr-sudo/yii2-cashier": "*"
 ```
 
 to the require section of your `composer.json` file.
