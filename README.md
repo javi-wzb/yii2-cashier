@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/awayr-sudo" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/55288049" height="100px">
+        <img src="https://avatars.githubusercontent.com/u/55288049" height="200px">
     </a>
     <h1 align="center">Cashier Extension for Yii 2 (Ported By Famous Yii2 Cashier [yii2mod/cashier]). Implemented with Latest Updates.</h1>
     <br>
