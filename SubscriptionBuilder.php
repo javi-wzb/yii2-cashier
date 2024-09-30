@@ -173,12 +173,19 @@ class SubscriptionBuilder
     public function create($token = null, array $options = [])
     {
         $customer = $this->getStripeCustomer($token, $options);
+
+        if ($this->name === 'basic' && $customer->subscriptions->count() === 0) {
+            $this->trialDays(30);
+        }
+
         $subscription = $customer->subscriptions->create($this->buildPayload());
+
         if ($this->skipTrial) {
             $trialEndsAt = null;
         } else {
             $trialEndsAt = $this->trialDays ? Carbon::now()->addDays($this->trialDays) : null;
         }
+
         $subscriptionModel = new SubscriptionModel([
             'user_id' => $this->user->id,
             'name' => $this->name,
@@ -189,10 +196,8 @@ class SubscriptionBuilder
             'ends_at' => null,
         ]);
         if ($subscriptionModel->save()) {
-            // return $subscriptionModel;
-            return [$subscription, $subscriptionModel];
+            return $subscriptionModel;
         } else {
-            print_r($subscriptionModel->getErrors());die;
             throw new Exception('Subscription was not saved.');
         }
     }
@@ -217,7 +222,6 @@ class SubscriptionBuilder
                 $this->user->updateCard($token);
             }
         }
-
         return $customer;
     }
 
@@ -230,7 +234,7 @@ class SubscriptionBuilder
     {
         return array_filter([
             'plan' => $this->plan,
-            // 'quantity' => $this->quantity,
+            'quantity' => $this->quantity,
             'coupon' => $this->coupon,
             'trial_end' => $this->getTrialEndForPayload(),
             'tax_percent' => $this->getTaxPercentageForPayload(),

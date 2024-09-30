@@ -76,7 +76,7 @@ trait Billable
      */
     public function hasCardOnFile(): bool
     {
-        return (bool) $this->card_brand;
+        return (bool)$this->card_brand;
     }
 
     /**
@@ -291,27 +291,30 @@ trait Billable
      */
     public function updateCard(string $token): void
     {
+        $isNewCard = true;
         $customer = $this->asStripeCustomer();
         $token = Token::retrieve($token, ['api_key' => $this->getStripeKey()]);
 
-        // If the given token already has the card as their default source, we can just
-        // bail out of the method now. We don't need to keep adding the same card to
-        // the user's account each time we go through this particular method call.
-        if ($token->card->id === $customer->default_source) {
-            return;
+        //Checks if the card already exists or only the expiration date has changed and updates it
+        foreach (Customer::allSources($customer->id) as $paymentMethod) {
+            if ($token->card->fingerprint === $paymentMethod->fingerprint) {
+                $isNewCard = false;
+                if ($token->card->exp_month != $paymentMethod->exp_month || $paymentMethod->exp_year != $token->card->exp_year) {
+                    Customer::updateSource($customer->id, $paymentMethod->id, ['exp_month' => $token->card->exp_month, 'exp_year' => $token->card->exp_year]);
+                }
+                break;
+            }
         }
-        $card = $customer->sources->create(['source' => $token]);
-        $customer->default_source = $card->id;
-        $customer->save();
-        // Next, we will get the default source for this user so we can update the last
-        // four digits and the card brand on this user record in the database, which
-        // is convenient when displaying on the front-end when updating the cards.
-        $source = $customer->default_source
-            ? $customer->sources->retrieve($customer->default_source)
-            : null;
 
-        $this->fillCardDetails($source);
-        $this->save();
+        if ($isNewCard) {
+            $card = Customer::createSource($customer->id, ['source' => $token]);
+        } else {
+            $card = $paymentMethod;
+        }
+
+        $customer->invoice_settings = ['default_payment_method' => $card->id];
+        $customer->save();
+        $this->updateCardFromStripe();
     }
 
     /**
@@ -385,7 +388,7 @@ trait Billable
             return false;
         }
 
-        foreach ((array) $plans as $plan) {
+        foreach ((array)$plans as $plan) {
             if ($subscription->stripe_plan === $plan) {
                 return true;
             }
@@ -442,19 +445,11 @@ trait Billable
     }
 
     /**
-     * Create a Stripe customer for the given user.
-     */
-    public function createStripeSession(string $token, array $options = []): Customer
-    {
-        // $this->use
-    }
-
-    /**
      * Get the Stripe customer for the user.
      */
     public function asStripeCustomer(): Customer
     {
-        return Customer::retrieve($this->stripe_id, $this->getStripeKey());
+        return Customer::retrieve(['id' => $this->stripe_id, 'expand' => ['sources', 'subscriptions']], $this->getStripeKey(), ['expand[]' => 'customer']);
     }
 
     /**

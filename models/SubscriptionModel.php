@@ -316,9 +316,9 @@ class SubscriptionModel extends ActiveRecord
      */
     public function cancel()
     {
+        // To resume the subscription we need to set the cancel at period end to true
         $subscription = $this->asStripeSubscription();
-
-        $subscription->cancel(['at_period_end' => true]);
+        $subscription->update($this->stripe_id, ['cancel_at_period_end' => true]);
 
         // If the user was on trial, we will set the grace period to end when the trial
         // would have ended. Otherwise, we'll retrieve the end of the billing period
@@ -376,18 +376,8 @@ class SubscriptionModel extends ActiveRecord
 
         $subscription = $this->asStripeSubscription();
 
-        // To resume the subscription we need to set the plan parameter on the Stripe
-        // subscription object. This will force Stripe to resume this subscription
-        // where we left off. Then, we'll set the proper trial ending timestamp.
-        $subscription->plan = $this->stripe_plan;
-
-        if ($this->onTrial()) {
-            $subscription->trial_end = $this->trial_ends_at->getTimestamp();
-        } else {
-            $subscription->trial_end = 'now';
-        }
-
-        $subscription->save();
+        // To resume the subscription we need to set the cancel at period end to false
+        $subscription->update($this->stripe_id, ['cancel_at_period_end' => false]);
 
         // Finally, we will remove the ending timestamp from the user's record in the
         // local database to indicate that the subscription is active again and is
@@ -406,5 +396,15 @@ class SubscriptionModel extends ActiveRecord
     public function asStripeSubscription()
     {
         return $this->user->asStripeCustomer()->subscriptions->retrieve($this->stripe_id);
+    }
+
+    /**
+     * Get the current period end date for the subscription.
+     *
+     * @return Carbon
+     */
+    public function currentPeriodEnd()
+    {
+        return Carbon::createFromTimestamp($this->asStripeSubscription()->current_period_end);
     }
 }
