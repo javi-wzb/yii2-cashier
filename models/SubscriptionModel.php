@@ -56,7 +56,7 @@ class SubscriptionModel extends ActiveRecord
         return [
             [['user_id', 'name', 'stripe_id', 'stripe_plan', 'quantity'], 'required'],
             [['user_id', 'quantity'], 'integer'],
-            [['trial_ends_at', 'ends_at'], 'safe'],
+            [['trial_ends_at', 'current_period_end', 'ends_at'], 'safe'],
             [['name', 'stripe_id', 'stripe_plan'], 'string', 'max' => 255],
         ];
     }
@@ -74,6 +74,7 @@ class SubscriptionModel extends ActiveRecord
             'stripe_plan' => Yii::t('app', 'Stripe Plan'),
             'quantity' => Yii::t('app', 'Quantity'),
             'trial_ends_at' => Yii::t('app', 'Trial End At'),
+            'current_period_end' => Yii::t('app', 'Current Period End'),
             'ends_at' => Yii::t('app', 'End At'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
@@ -98,6 +99,7 @@ class SubscriptionModel extends ActiveRecord
                 'class' => CarbonBehavior::class,
                 'attributes' => [
                     'trial_ends_at',
+                    'current_period_end',
                     'ends_at',
                 ],
             ],
@@ -396,15 +398,5 @@ class SubscriptionModel extends ActiveRecord
     public function asStripeSubscription()
     {
         return $this->user->asStripeCustomer()->subscriptions->retrieve($this->stripe_id);
-    }
-
-    /**
-     * Get the current period end date for the subscription.
-     *
-     * @return Carbon
-     */
-    public function currentPeriodEnd()
-    {
-        return Carbon::createFromTimestamp($this->asStripeSubscription()->current_period_end);
     }
 }

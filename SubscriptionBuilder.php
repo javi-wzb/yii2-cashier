@@ -193,6 +193,7 @@ class SubscriptionBuilder
             'stripe_plan' => $this->plan,
             'quantity' => $this->quantity,
             'trial_ends_at' => $trialEndsAt,
+            'current_period_end' => Carbon::createFromTimestamp($subscription->current_period_end),
             'ends_at' => null,
         ]);
         if ($subscriptionModel->save()) {
