@@ -19,6 +19,7 @@ use awayr\cashier\behaviors\CarbonBehavior;
  * @property string $stripe_plan
  * @property int $quantity
  * @property Carbon $trial_ends_at
+ * @property Carbon $current_period_end
  * @property Carbon $ends_at
  * @property int $created_at
  * @property int $updated_at
@@ -328,9 +329,7 @@ class SubscriptionModel extends ActiveRecord
         if ($this->onTrial()) {
             $this->ends_at = $this->trial_ends_at;
         } else {
-            $this->ends_at = Carbon::createFromTimestamp(
-                $subscription->current_period_end
-            );
+            $this->ends_at = $this->current_period_end;
         }
 
         $this->save();
